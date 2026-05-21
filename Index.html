@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern World History Learning Platform</title>
+  <style>
+    :root {
+      --bg: #f5f4ef;
+      --panel: #ffffff;
+      --panel-2: #faf8f2;
+      --text: #1f2937;
+      --muted: #5b6472;
+      --accent: #1f4f8b;
+      --accent-2: #7a5cff;
+      --line: #d8d2c7;
+      --success: #177245;
+      --warning: #b45309;
+      --shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #fbfaf7 0%, #f2efe8 100%);
+      color: var(--text);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr) 330px;
+      min-height: 100vh;
+    }
+
+    .sidebar, .content, .tutor {
+      padding: 20px;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .brand-mark {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      font-size: 1.02rem;
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(31,41,55,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-card { padding: 16px; margin-bottom: 16px; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 12px;
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .unit-list, .tool-list { display: grid; gap: 10px; }
+
+    .unit-btn, .tool-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: left;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .unit-btn:hover, .tool-btn:hover { transform: translateY(-1px); border-color: #b9c2d3; }
+    .unit-btn.active { background: #edf4ff; border-color: #b8cef4; }
+
+    .unit-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #e9eef8;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .unit-meta { color: var(--muted); font-size: 0.85rem; }
+
+    .progress-wrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      height: 10px; border-radius: 999px; background: #e7e2d7; overflow: hidden;
+    }
+
+    .progress-bar > span {
+      display: block; height: 100%; width: 68%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 999px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .stat strong { display: block; font-size: 1.1rem; }
+    .stat span { color: var(--muted); font-size: 0.82rem; }
+
+    .content {
+      padding-inline: 24px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-main, .hero-side, .reading, .teacher, .activity, .mini-panel {
+      padding: 18px;
+    }
+
+    .hero-main h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.5rem, 2vw, 2.2rem);
+    }
+
+    .hero-main p { margin: 0 0 14px; color: var(--muted); line-height: 1.6; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .primary, .secondary {
+      border: 0; border-radius: 14px; padding: 12px 16px; cursor: pointer; font-weight: 700;
+    }
+    .primary { background: var(--accent); color: white; }
+    .secondary { background: #e9edf5; color: var(--text); }
+
+    .hero-side { display: grid; gap: 12px; }
+
+    .hero-side .tile {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .tile h3, .reading h3, .teacher h3, .activity h3 {
+      margin: 0 0 10px;
+      font-size: 1.03rem;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1.35fr 0.95fr; gap: 18px; }
+
+    .reading-toolbar {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 14px; border-bottom: 1px solid var(--line);
+    }
+
+    .toolbar-group { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .reading h4 { margin: 18px 0 8px; font-size: 1.02rem; }
+    .reading p { line-height: 1.75; color: #273142; margin: 0 0 12px; }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 5px solid var(--accent);
+      background: #eef4ff;
+      border-radius: 12px;
+      color: #20314f;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .visual {
+      min-height: 130px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, #f2f5fa, #ebe4d6);
+      padding: 12px;
+      display: flex;
+      align-items: end;
+      font-size: 0.85rem;
+      color: #344051;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visual::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -20% auto;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(31,79,139,0.10);
+    }
+
+    .questions {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .question {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fcfbf7;
+    }
+
+    .question strong { display: block; margin-bottom: 8px; }
+    .question .options { display: grid; gap: 8px; }
+
+    .option {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .question textarea {
+      width: 100%; min-height: 96px; resize: vertical;
+      border-radius: 12px; border: 1px solid var(--line); padding: 12px; background: white;
+    }
+
+    .teacher-panel, .activity-panel, .sidebar-panel {
+      display: grid; gap: 12px;
+    }
+
+    .teacher-grid {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-2);
+      padding: 14px;
+    }
+
+    .box h4 { margin: 0 0 6px; }
+    .box p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+
+    .tutor {
+      border-left: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .tutor-header {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #f0f5ff, #f7f1ff);
+      border: 1px solid rgba(31,41,55,0.08);
+    }
+
+    .tutor-header h3 { margin: 0 0 6px; }
+    .tutor-header p { margin: 0; color: var(--muted); line-height: 1.5; }
+
+    .chat {
+      display: grid; gap: 10px;
+    }
+
+    .message {
+      padding: 12px 14px;
+      border-radius: 16px;
+      line-height: 1.5;
+      border: 1px solid var(--line);
+    }
+
+    .message.ai { background: #eef4ff; }
+    .message.student { background: white; }
+
+    .chat input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: white;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 12px 16px;
+      background: rgba(245,244,239,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-topbar .row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+
+    @media (max-width: 1200px) {
+      .app { grid-template-columns: 260px minmax(0, 1fr); }
+      .tutor { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+    }
+
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .hero, .grid-2, .teacher-grid, .visual-grid { grid-template-columns: 1fr; }
+      .content { padding-inline: 18px; }
+      .mobile-topbar { display: block; }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body.dark-auto {
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-2: #0b1220;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --line: #263244;
+        background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-topbar">
+    <div class="row">
+      <strong>Modern World History</strong>
+      <span class="pill">Unit 3 • China</span>
+    </div>
+  </div>
+
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>Modern World History</h1>
+          <p>Reading-based learning dashboard</p>
+        </div>
+      </div>
+
+      <section class="card nav-card">
+        <div class="section-title"><span>Units</span><span>6</span></div>
+        <div class="unit-list" id="unitList"></div>
+      </section>
+
+      <section class="card nav-card">
+        <div class="section-title"><span>Student Progress</span><span>68%</span></div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><span></span></div>
+          <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:.9rem;">
+            <span>Readings complete</span><span>17 / 25</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong>92%</strong><span>Quiz avg</span></div>
+            <div class="stat"><strong>41m</strong><span>Today</span></div>
+            <div class="stat"><strong>12</strong><span>Bookmarks</span></div>
+            <div class="stat"><strong>8</strong><span>Notes</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card nav-card">
+        <div class="section-title"><span>Tools</span><span>Reading</span></div>
+        <div class="tool-list">
+          <button class="tool-btn">Highlighting & notes</button>
+          <button class="tool-btn">Vocabulary support</button>
+          <button class="tool-btn">Text-to-speech</button>
+          <button class="tool-btn">Bookmarks</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="content">
+      <section class="hero">
+        <div class="card hero-main">
+          <h2>Engaging, rigorous history reading with built-in scaffolds.</h2>
+          <p>
+            Students move through clear units, chunked readings, embedded visuals, low-stakes checks,
+            and guided historical reasoning. Teachers can upload, edit, and track progress from the dashboard.
+          </p>
+          <div class="actions">
+            <button class="primary">Continue Reading</button>
+            <button class="secondary">Open Teacher Dashboard</button>
+          </div>
+        </div>
+        <div class="card hero-side">
+          <div class="tile">
+            <h3>Assigned unit</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <strong>China</strong><span class="pill">In progress</span>
+            </div>
+            <p style="margin-top:8px; color:var(--muted);">Reading 2 of 4 · Key ideas, visuals, and embedded questions.</p>
+          </div>
+          <div class="tile">
+            <h3>Next up</h3>
+            <p>Interactive map, short response, and teacher feedback checkpoint.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <article class="card reading">
+          <div class="reading-toolbar">
+            <div>
+              <h3 style="margin:0 0 4px;">Unit: China</h3>
+              <div style="color:var(--muted); font-size:.92rem;">Part 2 of 4 · Early imperial governance, trade, and cultural exchange</div>
+            </div>
+            <div class="toolbar-group">
+              <span class="chip">A- / A+</span>
+              <span class="chip">Line spacing</span>
+              <span class="chip">Dyslexia font</span>
+              <span class="chip">Dark mode</span>
+            </div>
+          </div>
+
+          <h4>Section 1: Why geography mattered</h4>
+          <p>
+            China’s physical geography shaped how power developed. Rivers supported agriculture, while mountains,
+            deserts, and steppes created both boundaries and points of contact. Over time, rulers used bureaucracy,
+            roads, and tribute systems to govern large territories and connect diverse regions.
+          </p>
+
+          <div class="visual-grid">
+            <div class="visual">Interactive map: rivers, mountain barriers, and trade corridors</div>
+            <div class="visual">Timeline: dynastic change and state consolidation</div>
+            <div class="visual">Primary source image: official seal or inscription</div>
+            <div class="visual">Diagram: bureaucracy, taxation, and local administration</div>
+          </div>
+
+          <div class="callout">
+            <strong>Key idea:</strong> Geography did not determine history by itself, but it strongly influenced the choices
+            rulers could make and the connections people could build.
+          </div>
+
+          <h4>Section 2: Trade and exchange</h4>
+          <p>
+            Merchants, diplomats, and travelers carried goods, beliefs, and technologies across long distances.
+            The Silk Roads linked China with Central Asia, the Middle East, and beyond, but exchange also involved
+            risk, taxation, conflict, and unequal power.
+          </p>
+
+          <p>
+            A strong historical reading should not treat trade as simple progress. It should ask who benefited,
+            who paid the cost, and how states tried to control movement across their borders.
+          </p>
+
+          <h4>Section 3: Historical thinking checkpoint</h4>
+          <p>
+            Compare the advantages of centralized rule with the challenges of governing a large and diverse empire.
+            What evidence suggests that political order and cultural exchange were connected? Use specific details.
+          </p>
+
+          <div class="questions">
+            <div class="question">
+              <strong>Multiple choice</strong>
+              <p>Which factor most directly helped Chinese rulers govern large territories?</p>
+              <div class="options">
+                <button class="option">A. A single ocean border</button>
+                <button class="option">B. Bureaucratic administration and roads</button>
+                <button class="option">C. Complete isolation from neighbors</button>
+                <button class="option">D. The absence of agriculture</button>
+              </div>
+            </div>
+
+            <div class="question">
+              <strong>Short response</strong>
+              <p>How did geography shape both protection and contact for China?</p>
+              <textarea placeholder="Type your response here..."></textarea>
+            </div>
+          </div>
+        </article>
+
+        <aside class="card activity">
+          <h3>Learning supports</h3>
+          <div class="activity-panel">
+            <div class="box">
+              <h4>Vocabulary</h4>
+              <p>Hover or tap words for definitions, pronunciation, and context-based explanations.</p>
+            </div>
+            <div class="box">
+              <h4>Reading checkpoint</h4>
+              <p>Students receive hints and scaffolds without being given direct answers.</p>
+            </div>
+            <div class="box">
+              <h4>Interactive media</h4>
+              <p>Maps, timelines, diagrams, and source images appear throughout the reading instead of only at the top.</p>
+            </div>
+            <div class="box">
+              <h4>Optional TTS</h4>
+              <p>Use the browser Web Speech API for text-to-speech without requiring an API key.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="card teacher" style="margin-top:18px;">
+        <h3>Teacher Dashboard</h3>
+        <div class="teacher-panel">
+          <div class="teacher-grid">
+            <div class="box">
+              <h4>Upload & replace readings</h4>
+              <p>Teachers can add, edit, or swap reading files and supplemental materials.</p>
+            </div>
+            <div class="box">
+              <h4>Question editor</h4>
+              <p>Build multiple choice, short response, and higher-order analysis prompts.</p>
+            </div>
+            <div class="box">
+              <h4>Student analytics</h4>
+              <p>Track completion, quiz scores, activity data, and reading progress by class block.</p>
+            </div>
+            <div class="box">
+              <h4>Class management</h4>
+              <p>Create sections, invite students by code or link, and organize students under a teacher.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="tutor">
+      <div class="tutor-header">
+        <h3>AI Tutor Sidebar</h3>
+        <p>
+          A teacher-like tutor that gives hints, asks probing questions, and supports historical reasoning without
+          simply giving away answers.
+        </p>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div class="chat">
+          <div class="message ai">I can help you think through the question. Which details from the reading show that geography affected both protection and trade?</div>
+          <div class="message student">Maybe the rivers and mountains?</div>
+          <div class="message ai">Good start. Which one seems to support agriculture, and which one limits movement? Try explaining both roles separately.</div>
+          <input type="text" placeholder="Ask for a hint, a vocabulary definition, or a step-by-step guide..." />
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <h3 style="margin:0 0 10px;">Context-aware support</h3>
+        <p style="margin:0; color:var(--muted); line-height:1.6;">
+          The tutor can reference the current unit, current section, and the question on screen, then respond with
+          Socratic prompts, evidence checks, and sentence starters.
+        </p>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <h3 style="margin:0 0 10px;">Sample unit structure</h3>
+        <div class="tool-list">
+          <button class="tool-btn">9/11 · background, events, aftermath, memory</button>
+          <button class="tool-btn">Israel · ancient to modern context</button>
+          <button class="tool-btn">India · empire, religion, colonialism, independence</button>
+          <button class="tool-btn">China · dynasties, trade, revolution, reform</button>
+          <button class="tool-btn">Africa · geography, empires, colonization, decolonization</button>
+          <button class="tool-btn">Latin America · conquest, independence, change</button>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Built as a responsive starter template that can be expanded into a full app with authentication, database-backed
+        reading management, analytics, and AI integration.
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const units = [
+      { name: '9/11', parts: 4, status: 'New reading' },
+      { name: 'Israel', parts: 4, status: 'Assigned' },
+      { name: 'India', parts: 4, status: 'Assigned' },
+      { name: 'China', parts: 4, status: 'In progress' },
+      { name: 'Africa', parts: 4, status: 'Assigned' },
+      { name: 'Latin America', parts: 4, status: 'Assigned' },
+    ];
+
+    const unitList = document.getElementById('unitList');
+    units.forEach((unit, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'unit-btn' + (idx === 3 ? ' active' : '');
+      btn.innerHTML = `
+        <div class="unit-top">
+          <span>${unit.name}</span>
+          <span class="pill">${unit.parts} parts</span>
+        </div>
+        <div class="unit-meta">${unit.status} · Reading, visuals, and checks</div>
+      `;
+      unitList.appendChild(btn);
+    });
+
+    // Lightweight UI interactions for a polished prototype feel.
+    document.querySelectorAll('.unit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.style.borderColor = '#7a5cff';
+        btn.style.background = '#f4f0ff';
+      });
+    });
+  </script>
+</body>
+</html>
